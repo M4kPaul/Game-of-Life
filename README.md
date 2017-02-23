@@ -1,6 +1,5 @@
 # Game-of-Life
 
-Plany:
 1. Wczytywanie/zapis:
   * ciąg 0 i 1 (cała siatka/tylko początek => reszta = 0)
   * współrzędne żywych komórek
