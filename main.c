@@ -70,8 +70,8 @@ void Print(int grid[HEIGHT][WIDTH], int cState) {
         grid[i][j] = cState;
         printf("o");
       } else {
-        printf(".");
         grid[i][j] = 0;
+        printf(".");
       }
     }
     printf("\n");
