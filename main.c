@@ -17,11 +17,12 @@ int main(int argc, char *argv[]) {
              "111000000000000000000000000000";
 
   int arr1[GRID_H][GRID_W];
-  ClrArr(arr1);
-  InitArr(arr1, in);
-
   int arr2[GRID_H][GRID_W];
+  
+  ClrArr(arr1);
   ClrArr(arr2);
+  
+  InitArr(arr1, in);
 
   Simulate(arr1, arr2);
 
@@ -106,6 +107,5 @@ void Simulate(int arr1[GRID_H][GRID_W], int arr2[GRID_H][GRID_W]) {
       }
     }
     getchar();
-    system("cls");
   }
 }
