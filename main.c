@@ -1,11 +1,5 @@
-// ConsoleApplication1.cpp : Defines the entry point for the console application.
-//
-
-#include "stdafx.h"
-
-
 #include <stdio.h>
-/* +2 dla ramki żeby if'ami się nie bawić */
+                                                   /* +2 dla ramki żeby if'ami się nie bawić */
 #define HEIGHT 32                                  /* wysokość                               */
 #define WIDTH 32                                   /* szerokość                              */
 #define NUMBER_OF_GENERATIONS 1000                 /* chyba za długa nazwa                   */
