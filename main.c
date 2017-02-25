@@ -1,17 +1,17 @@
 #include <stdio.h>
-                                                                   // +2 dla ramki żeby if'ami się nie bawić
-#define GRID_H 32                                                  // wysokość
-#define GRID_W 32                                                  // szerokość
-#define NUMBER_OF_GENERATIONS 1000                                 // chyba za długa nazwa
+                                                                   /* +2 dla ramki żeby if'ami się nie bawić */
+#define GRID_H 32                                                  /* wysokość                               */
+#define GRID_W 32                                                  /* szerokość                              */
+#define NUMBER_OF_GENERATIONS 1000                                 /* chyba za długa nazwa                   */
 
-void ClrArr(int arr[GRID_H][GRID_W]);                              // wypełnia zerami
-void InitArr(int arr[GRID_H][GRID_W], char *in);                   // ładuje wejście
-void NextGen(int curr[GRID_H][GRID_W], int next[GRID_H][GRID_W]);  // tworzy kolejną generację
-void Print(int arr[GRID_H][GRID_W]);                               // wyświetla tablicę
-void Simulate(int arr1[GRID_H][GRID_W], int arr2[GRID_H][GRID_W]); // rozpoczyna symulacje
+void ClrArr(int arr[GRID_H][GRID_W]);                              /* wypełnia zerami          */
+void InitArr(int arr[GRID_H][GRID_W], char *in);                   /* ładuje wejście           */
+void NextGen(int curr[GRID_H][GRID_W], int next[GRID_H][GRID_W]);  /* tworzy kolejną generację */
+void Print(int arr[GRID_H][GRID_W]);                               /* wyświetla tablicę        */
+void Simulate(int arr1[GRID_H][GRID_W], int arr2[GRID_H][GRID_W]); /* rozpoczyna symulacje     */
 
 int main(int argc, char *argv[]) {
-  // glider - szybowiec
+  /* glider - szybowiec */
   char *in = "010000000000000000000000000000"
              "001000000000000000000000000000"
              "111000000000000000000000000000";
@@ -69,7 +69,7 @@ void NextGen(int curr[GRID_H][GRID_W], int next[GRID_H][GRID_W]) {
           || (curr[i][j] == 0 && neighbours == 3)) {
         next[i][j] = 1;
       }
-      else { // od razu czyści
+      else { /* od razu czyści */
         next[i][j] = 0;
       }
     }
@@ -87,7 +87,7 @@ void Print(int arr[GRID_H][GRID_W]) {
 }
 
 void Simulate(int arr1[GRID_H][GRID_W], int arr2[GRID_H][GRID_W]) {
-  int cState = 1; // obecna tablica
+  int cState = 1; /* obecna tablica */
 
   int i;
   for (i = 0; i < NUMBER_OF_GENERATIONS; i++) {
