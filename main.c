@@ -1,21 +1,24 @@
 #include <stdio.h>
-                                                                   /* +2 dla ramki żeby if'ami się nie bawić */
-#define GRID_H 39                                                  /* wysokość                               */
-#define GRID_W 53                                                  /* szerokość                              */
-#define NUMBER_OF_GENERATIONS 1000                                 /* chyba za długa nazwa                   */
+/* #include "bmp_reader.h" */
+                                                   /* +2 dla ramki żeby if'ami się nie bawić */
+#define HEIGHT 39                                  /* wysokość                               */
+#define WIDTH 53                                   /* szerokość                              */
+#define NUMBER_OF_GENERATIONS 1000                 /* chyba za długa nazwa                   */
 
-void ClrArr(int arr[GRID_H][GRID_W]);                              /* wypełnia zerami          */
-void InitArr(int arr[GRID_H][GRID_W], char *in);                   /* ładuje wejście           */
-void NextGen(int curr[GRID_H][GRID_W], int next[GRID_H][GRID_W]);  /* tworzy kolejną generację */
-void Print(int arr[GRID_H][GRID_W]);                               /* wyświetla tablicę        */
-void Simulate(int arr1[GRID_H][GRID_W], int arr2[GRID_H][GRID_W]); /* rozpoczyna symulacje     */
+void Init(int grid[HEIGHT][WIDTH], char *in);      /* ładuje wejście           */
+void NextGen(int grid[HEIGHT][WIDTH], int cState); /* tworzy kolejną generację */
+void Print(int grid[HEIGHT][WIDTH], int cState);   /* wyświetla tablicę        */
+void Simulate(int grid[HEIGHT][WIDTH]);            /* rozpoczyna symulacje     */
 
 int main(int argc, char *argv[]) {
   /* glider - szybowiec */
   /*
-  char *in = "010000000000000000000000000000000000000000000000000"
-             "001000000000000000000000000000000000000000000000000"
-             "111000000000000000000000000000000000000000000000000";
+  char *in = "01000"
+             "00100"
+             "11100";
+  FILE *fn = fopen("glider_gun.bmp", "rb");
+  char *in = ReadBMP(fn);
+  printf("\n%s\n", in);
   */
 
   /* glider gun */
@@ -29,97 +32,85 @@ int main(int argc, char *argv[]) {
              "000000000001000001000000010000000000000000000000000"
              "000000000000100010000000000000000000000000000000000"
              "00000000000001100000000000000000000000000000000000"; /* <- 509 znaków = limit w ansi C lol */
-  
-  int arr1[GRID_H][GRID_W];
-  int arr2[GRID_H][GRID_W];
-  
-  ClrArr(arr1);
-  ClrArr(arr2);
-  
-  InitArr(arr1, in);
 
-  Simulate(arr1, arr2);
+  int grid[HEIGHT][WIDTH];
+  Init(grid, in);
+
+  Simulate(grid);
 
   return 0;
 }
 
-void ClrArr(int arr[GRID_H][GRID_W]) {
-  int i, j;
-  for (i = 0; i < GRID_H; i++) {
-    for (j = 0; j < GRID_W; j++) {
-      arr[i][j] = 0;
-    }
-  }
-}
-
-void InitArr(int arr[GRID_H][GRID_W], char *in) {
+void Init(int grid[HEIGHT][WIDTH], char *in) {
   int i, j, k = 0;
-  for (i = 1; i < GRID_H - 1; i++) {
-    for (j = 1; j < GRID_W - 1; j++) {
-      if (in[k] != '\0') {
-        arr[i][j] = in[k++] - '0';
+  for (i = 0; i < HEIGHT; i++) {
+    for (j = 0; j < WIDTH; j++) {
+      if (in[k] != '\0' && i != 0 && j != 0
+          && i != HEIGHT- 1 && j != WIDTH - 1) {
+        grid[i][j] = in[k++] - '0';
       } else {
-        k = -1;
-        break;
+        grid[i][j] = 0;
       }
     }
-    if (k == -1) {
-      break;
-    }
   }
 }
 
-void NextGen(int curr[GRID_H][GRID_W], int next[GRID_H][GRID_W]) {
+void NextGen(int grid[HEIGHT][WIDTH], int cState) {
   int i, j, k, l;
-  for (i = 1; i < GRID_H - 1; i++) {
-    for (j = 1; j < GRID_W - 1; j++) {
+  for (i = 1; i < HEIGHT - 1; i++) {
+    for (j = 1; j < WIDTH - 1; j++) {
       int neighbours = 0;
       for (k = -1; k <= 1; k++) {
-        for (l = -1; l <= 1; l++) {
-          neighbours += curr[i + k][j + l];
+        for (l = -1; l <= 1; l++) {                                       /* zlicza sąsiadów */
+          if ((k != 0 || l != 0) &&                                       /*    [?][?][?]    */
+              (grid[i + k][j + l] == cState || grid[i + k][j + l] > 2)) { /*    [?][x][?]    */
+            neighbours++;                                                 /*    [?][?][?]    */
+          }
         }
       }
-      neighbours -= curr[i][j];
-      if ((curr[i][j] == 1 && (neighbours == 2 || neighbours == 3))
-          || (curr[i][j] == 0 && neighbours == 3)) {
-        next[i][j] = 1;
+      if ((grid[i][j] == cState && (neighbours == 2 || neighbours == 3)) /* żywa && (2 || 3 sąsiadów) = żywa */
+          || (grid[i][j] == 0 && neighbours == 3)) {                     /* martwa && 3 sąsiadów      = żywa */
+        if (grid[i][j] == 0) {
+          grid[i][j] = (cState == 1) ? 2 : 1;
+        } else {
+          grid[i][j] = 3; /* żywa teraz i wcześniej */
+        }
       }
-      else { /* od razu czyści */
-        next[i][j] = 0;
+      else if (grid[i][j] == cState) {
+        grid[i][j] = 4; /* martwa teraz i żywa wcześniej */
       }
     }
   }
 }
 
-void Print(int arr[GRID_H][GRID_W]) {
+void Print(int grid[HEIGHT][WIDTH], int cState) {
   int i, j;
-  for (i = 1; i < GRID_H - 1; i++) {
-    for (j = 1; j < GRID_W - 1; j++) {
-      printf(arr[i][j] == 1 ? "X" : "_");
+  for (i = 1; i < HEIGHT - 1; i++) {
+    for (j = 1; j < WIDTH - 1; j++) {
+      if (grid[i][j] == cState || grid[i][j] == 3) {
+        grid[i][j] = cState;
+        printf("o");
+      } else {
+        grid[i][j] = 0;
+        printf(".");
+      }
     }
     printf("\n");
   }
 }
 
-void Simulate(int arr1[GRID_H][GRID_W], int arr2[GRID_H][GRID_W]) {
+void Simulate(int grid[HEIGHT][WIDTH]) {
   int cState = 1; /* obecna tablica */
 
   int i;
   for (i = 0; i < NUMBER_OF_GENERATIONS; i++) {
-    switch (cState) {
-      case 1: {
-        Print(arr1);
-        NextGen(arr1, arr2);
-        cState = 2;
-        break;
-      }
-      case 2: {
-        Print(arr2);
-        NextGen(arr2, arr1);
-        cState = 1;
-        break;
-      }
-    }
+    Print(grid, cState);
+
+    NextGen(grid, cState);
+
+    cState = (cState == 1) ? 2 : 1;
+
     getchar();
+    system("cls");
   }
 }
