@@ -4,9 +4,9 @@
   * [x] ciąg 0 i 1 (cała siatka/tylko początek => reszta = 0)
   * [ ] współrzędne żywych komórek
   * [x] bitmapa
-  * ~~jpg/png ze stanem startowym~~
+  * [ ] png
 2. Działanie:
-  * ~~dwie tablice dwuwymiarowe~~
   * [x] jedna tablica dwuwymiarowa
+  * [x] ~~dwie tablice dwuwymiarowe~~
   * ~~dwie tablice jednowymiarowe~~
   * ~~jedna tablica jednowymiarowa~~
