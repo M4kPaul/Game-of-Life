@@ -15,4 +15,14 @@ struct:
   - bitmapa--;
   - gif++;
 
-> ./life -flaga \<input\> -flaga2 \<output\> 
+> ./life -typ_sąsiedztwa[N,M] <liczba_generacji> -input_method[c,b,p] \<input\> -output_method[c,b,p] \<output\> [-g \<gif_name\>]
+
+Podział plików:
+- main.c
+- grid_struct.h
+- simulator.c?h
+- neighbours.c?h
+- png_rw.c?h
+- bin_rw.c?h
+- crs_rw.c?h
+- gif.c?h?
