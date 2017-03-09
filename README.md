@@ -15,4 +15,4 @@ struct:
   - bitmapa--;
   - gif++;
 
-> ./life -flaga <input> -flaga2 <output> 
+> ./life -flaga \<input\> -flaga2 \<output\> 
