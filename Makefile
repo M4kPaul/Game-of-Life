@@ -14,5 +14,3 @@ main.o: src/main.c
 clean:
 	-rm life
 	-rm src/*.o
-	-rm src/bmp-reader/*.o
-
