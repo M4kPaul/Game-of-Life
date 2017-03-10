@@ -1,5 +1,5 @@
-#ifndef _GRID_H
-#define _GRID_G
+#ifndef GRID_H_
+#define GRID_G_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,4 +15,4 @@ grid_t makeGrid(grid_t grid, int rows, int columns);
 /* funkcja do debugowania */
 void printGrid(grid_t grid);
 
-#endif
+#endif /* GRID_H_ */
