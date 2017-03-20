@@ -1,43 +1,50 @@
 #include "grid.h"
 
-grid_t makeGrid(grid_t grid, int rows, int columns) {
-	grid = malloc(sizeof *grid);
-	grid->data = malloc((rows * columns) * sizeof *grid->data);
-	
-	grid->columns = columns;
-	grid->rows = rows;
-	
-	return grid;
+int make_grid(grid_t *grid, int width, int height) {
+    grid->width = width;
+    grid->height = height;
+
+    width += 2;
+    height += 2;
+
+    grid->data = malloc(height * sizeof(int));
+
+    for(int y = 0; y < height; y++) {
+        grid->data[y] = malloc(width * sizeof(int));
+        if(!grid->data[y]) {
+            fprintf(stderr, "grid.c: memory cannot be allocated for the grid\n");
+
+            return EXIT_FAILURE;
+        }
+    }
+
+//    for(int x = 0; x < width; x++) {
+//        grid->data[0][x] = 7;
+//        grid->data[height - 1][x] = 7;
+//    }
+//
+//    for(int y = 0; y < height; y++) {
+//        grid->data[y][0] = 7;
+//        grid->data[y][width - 1] = 7;
+//    }
+//
+    return EXIT_SUCCESS;
 }
 
-void printGrid(grid_t grid) {
-	int i, j;
-	for(i = 0; i < grid->rows; i++) {
-		for(j = 0; j < grid->columns; j++) {
-			printf("%d ", grid->data[i * grid->columns + j]);
-		}
-		printf("\n");
-	}
+void print_grid(grid_t *grid) {
+    for(int y = 1; y <= grid->height; y++) {
+        for(int x = 1; x <= grid->width; x++) {
+            printf("%d ", grid->data[y][x]);
+        }
+        printf("\n");
+    }
 }
 
-int main(int argc, char **argv) {
-	grid_t curGrid;
-	
-	/*
-	 * nie może być samo makeGrid, bo grid_t jest wskaznikiem, 
-	 * wiec curGrid = null przy deklaracji i trzeba mu przekazac
-	 * wskaznik na zaalokowano pamiec, to tak jakbys mial
-	 * jakies watpliwosci
-	*/
-	curGrid = makeGrid(curGrid, 3, 5);
-	
-	curGrid->data[2] = 2;
-	curGrid->data[3] = 3;
-	curGrid->data[5] = 5;
-	curGrid->data[7] = 7;
-	curGrid->data[11] = 2;
-	
-	printGrid(curGrid);
-	
-	return 0;
+void print_grid_with_borders(grid_t *grid) {
+    for(int y = 0; y <= grid->height + 1; y++) {
+        for(int x = 0; x <= grid->width + 1; x++) {
+            printf("%d ", grid->data[y][x]);
+        }
+        printf("\n");
+    }
 }
