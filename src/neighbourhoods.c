@@ -2,10 +2,11 @@
 
 int Neighbours(grid_t *grid, int x, int y, int type=1) {
     switch type: {
-        case 1:
-            return Moore(grid, x, y);
         case 2:
             return Neumann(grid, x, y);
+        case 1:
+        default:
+            return Moore(grid, x, y);
     }
 }
 
