@@ -21,7 +21,7 @@ Podział plików:
 - main.c
 - grid_struct.h
 - simulator.c?h
-- neighbours.c?h
+- neighbourhoods.c?h
 - png_rw.c?h
 - bin_rw.c?h
 - crs_rw.c?h
