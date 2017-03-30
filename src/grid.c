@@ -36,7 +36,7 @@ void print_grid(grid_t *grid) {
     int y, x;
     for(y = 1; y <= grid->height; y++) {
         for(x = 1; x <= grid->width; x++) {
-            printf("%d ", grid->data[y][x]);
+            printf("%c ", (grid->data[y][x]) ? 'o' : ' ');
         }
         printf("\n");
     }

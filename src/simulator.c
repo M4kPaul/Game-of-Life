@@ -13,6 +13,7 @@ void Simulate(grid_t *grid1, int numberOfGenerations, int type) {
             NextGen(&grid2, grid1, type);
         }
         print_grid( (i % 2) ? &grid2 : grid1 );
+        getchar();
     }
 }
 

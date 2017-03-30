@@ -115,10 +115,11 @@ int read_png_to_grid(char *file_name, grid_t *grid) {
         return EXIT_FAILURE;
     }
 
+    //png_bytep bitmap[100];
     png_bytep bitmap[height];
     int y;
     for(y = 0; y < height; y++) {
-        bitmap[y] = malloc(PIXEL_SIZE_DEFAULT * grid->width * sizeof(uint8_t));
+        bitmap[y] = malloc(PIXEL_SIZE_DEFAULT * width * sizeof(uint8_t));
         if(!bitmap[y]) {
             fprintf(stderr, "png_reader.c: memory cannot be allocated for bitmap\n");
 
@@ -146,7 +147,7 @@ int read_png_to_grid(char *file_name, grid_t *grid) {
         return EXIT_FAILURE;
     }
 
-    png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+//    png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
 /*      TODO destroy_bitmap();
 //    fclose(fp); //wft? wywala; "double free or corruption"
 */

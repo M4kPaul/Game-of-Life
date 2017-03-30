@@ -16,6 +16,7 @@ int main(int argc, char **argv) {
 
         return 1;
     }
+
     Simulate(&grid, 100, 1);
 //    print_grid(&grid);
 //    print_grid_with_borders(&grid);
