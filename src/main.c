@@ -20,7 +20,8 @@ int main(int argc, char **argv) {
 //    print_grid(&grid);
 //    print_grid_with_borders(&grid);
 
-/*    if(write_grid_to_png(&grid, file_name_out)) {
+/*    if(write_grid_to_png(&grid, file_name_out)) {dir
+ *
 //        TODO destroy_grid();
 
         return 1;

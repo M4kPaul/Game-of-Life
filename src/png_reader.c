@@ -1,5 +1,4 @@
 #include "png_reader.h"
-#include "grid.h"
 
 static int is_black(png_bytepp bitmap, int x, int y) {
     if (bitmap[y][x] == 0 && bitmap[y][++x] == 0 && bitmap[y][++x] == 0) {
