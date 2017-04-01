@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    if (Simulate(&grid, 100000, 1)) {
+    if (Simulate(&grid, 1000, 1)) {
 //        TODO destroy_grid(); ?
         return 1;
     }
