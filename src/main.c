@@ -12,6 +12,8 @@ void *inc_x(void *ptr) {
     while (x <= 10000) {
         printf("%s - %d\n", message, x++);
     }
+
+    return NULL;
 }
 
 int main(int argc, char **argv) {
