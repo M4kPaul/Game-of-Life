@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(Game_of_Life)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic") # nie działa?
 
 set(SOURCE_FILES
         src/main.c
@@ -17,3 +17,6 @@ add_executable(Game_of_Life ${SOURCE_FILES})
 find_package(PNG REQUIRED)
 include_directories(${PNG_INCLUDE_DIR})
 target_link_libraries(Game_of_Life ${PNG_LIBRARY})
+
+find_package (Threads)
+target_link_libraries (Game_of_Life ${CMAKE_THREAD_LIBS_INIT})
