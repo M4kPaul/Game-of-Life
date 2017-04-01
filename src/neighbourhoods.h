@@ -5,10 +5,10 @@
 
 #include "grid.h"
 
-int Neighbours(grid_t *grid, int x, int y, int type);
+int Neighbours(grid_t *grid, int y, int x, int type);
 
-int Moore(grid_t *grid, int x, int y);
+int Moore(grid_t *grid, int y, int x);
 
-int Neumann(grid_t *grid, int x, int y);
+int Neumann(grid_t *grid, int y, int x);
 
 #endif /* NEIGHBOURHOODS_H_ */
