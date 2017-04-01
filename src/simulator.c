@@ -1,10 +1,23 @@
 #include "simulator.h"
 
-void Simulate(grid_t *grid1, int numberOfGenerations, int type) {
+void *PngSave(void *arguments) {
+    threadData *args;
+    args = (threadData *)arguments;
+
+    write_grid_to_png(args->grid, args->fileName);
+
+    pthread_exit(NULL);
+}
+
+int Simulate(grid_t *grid1, int numberOfGenerations, int type) {
     int i;
     grid_t grid2;
+    threadData data;
+    int responseCode;
+    pthread_t threads[numberOfGenerations];
 
     make_grid(&grid2, grid1->width, grid1->height);
+    make_grid(&data.grid, grid1->width, grid1->height);
 
     for (i = 0; i < numberOfGenerations; i++) {
         if (i % 2 == 0) {
@@ -12,7 +25,29 @@ void Simulate(grid_t *grid1, int numberOfGenerations, int type) {
         } else {
             NextGen(&grid2, grid1, type);
         }
+
+        data.grid = (i%2) ? grid1 : &grid2;
+        sprintf(data.fileName, "..\\output\\multiThreadTest\\%05d.png", i); /* TODO format size */
+
+        if (MULTITHREADING) {
+            responseCode = pthread_create(&threads[i], NULL, PngSave, (void *)&data);
+            if (responseCode) {
+                fprintf(stderr, "simulator.c: Error - pthread_create() return code: %d\n", responseCode);
+
+                return EXIT_FAILURE;
+            }
+        } else {
+            write_grid_to_png(data.grid, data.fileName);
+        }
     }
+
+    if (MULTITHREADING) {
+        for (i = 0; i < numberOfGenerations; i++) {
+            pthread_join(threads[i], NULL);
+        }
+    }
+
+    return EXIT_SUCCESS;
 }
 
 void TransferBorders(grid_t *grid) { /* copy over only if existed in border */

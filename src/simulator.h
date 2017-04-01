@@ -2,11 +2,23 @@
 #define SIMULATOR_H_
 
 #include <stdio.h>
+#include <string.h>
+#include <pthread.h>
 
 #include "grid.h"
 #include "neighbourhoods.h"
+#include "png_writer.h"
 
-void Simulate(grid_t *grid1, int numberOfGenerations, int type);
+#define MULTITHREADING 1
+
+typedef struct {
+    grid_t *grid;
+    char *fileName;
+} threadData;
+
+void *PngSave(void *arguments);
+
+int Simulate(grid_t *grid1, int numberOfGenerations, int type);
 
 void TransferBorders(grid_t *grid);
 

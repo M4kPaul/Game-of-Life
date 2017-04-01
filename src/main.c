@@ -1,45 +1,14 @@
 #include <stdio.h>
-#include <pthread.h>
+#include <time.h>
 
 #include "grid.h"
 #include "png_reader.h"
 #include "png_writer.h"
 #include "simulator.h"
 
-void *inc_x(void *ptr) {
-    int x = 0;
-    char *message = (char *)ptr;
-    while (x <= 10000) {
-        printf("%s - %d\n", message, x++);
-    }
-
-    return NULL;
-}
-
 int main(int argc, char **argv) {
-    pthread_t thread1, thread2;
-    const char *message1 = "Thread 1";
-    const char *message2 = "Thread 2";
+    clock_t start = clock();
 
-    int ret1 = pthread_create(&thread1, NULL, inc_x, (void*)message1);
-    if (ret1) {
-        fprintf(stderr,"Error - pthread_create() return code: %d\n", ret1);
-
-        return 1;
-    }
-
-    int ret2 = pthread_create(&thread2, NULL, inc_x, (void*)message2);
-    if (ret2) {
-        fprintf(stderr,"Error - pthread_create() return code: %d\n", ret2);
-
-        return 1;
-    }
-
-    pthread_join(thread1, NULL);
-    pthread_join(thread2, NULL);
-
-
-    /*
     char *file_name_in = argc > 1 ? argv[1] : stdin;
     char *file_name_out = argc > 2 ? argv[2] : stdin;
 
@@ -50,8 +19,16 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    Simulate(&grid, 1000, 1);
+    if (Simulate(&grid, 100000, 1)) {
+//        TODO destroy_grid(); ?
+        return 1;
+    }
 
+    clock_t stop = clock();
+    double elapsed = (double)(stop - start) * 1000.0 / CLOCKS_PER_SEC;
+    printf("Time elapsed in ms: %f", elapsed);
+
+    /*
     if (write_grid_to_png(&grid, file_name_out)) {
 //        TODO destroy_grid();
         return 1;
