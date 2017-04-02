@@ -6,12 +6,15 @@
 
 #include "grid.h"
 #include "png.h"
+#include "png_reader.h"
 
 #define PNG_DEPTH_DEFAULT 8
 #define PIXEL_SIZE_DEFAULT 3
 
-static void convert_grid_to_bitmap(grid_t *grid, png_bytepp bitmap);
+static int ConvertGridToBitmap(grid_t *grid, png_bytepp bitmap);
 
-int write_grid_to_png(grid_t *grid, char *file_name);
+static void DestroyBitmap(png_bytepp bitmap, int height);
+
+int WriteGridToPng(grid_t *grid, char *file_name);
 
 #endif /* PNG_WRITER_H_ */

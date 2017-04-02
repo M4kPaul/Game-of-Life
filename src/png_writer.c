@@ -1,10 +1,13 @@
 #include "png_writer.h"
 
-static void convert_grid_to_bitmap(grid_t *grid, png_bytepp bitmap) {
+static int ConvertGridToBitmap(grid_t *grid, png_bytepp bitmap) {
     int position;
 
     for (int y = 1; y <= grid->height; y++) {
         png_bytep row = malloc(PIXEL_SIZE_DEFAULT * grid->width * sizeof(uint8_t));
+        if(!row) {
+            return EXIT_FAILURE;
+        }
         for (int x = 1; x <= grid->width; x++) {
             position = PIXEL_SIZE_DEFAULT * (x - 1);
             if (grid->data[y][x] == 0) {
@@ -19,9 +22,17 @@ static void convert_grid_to_bitmap(grid_t *grid, png_bytepp bitmap) {
         }
         bitmap[y - 1] = row;
     }
+
+    return EXIT_SUCCESS;
 }
 
-int write_grid_to_png(grid_t *grid, char *file_name) {
+static void DestroyBitmap(png_bytepp bitmap, int height) {
+    for(int y = 0; y < height; y++) {
+        free(bitmap[y]);
+    }
+}
+
+int WriteGridToPng(grid_t *grid, char *file_name) {
     FILE *fp = fopen(file_name, "wb");
     if (!fp) {
         fprintf(stderr, "png_writer.c: file %s cannot be opened for writing\n", file_name);
@@ -59,7 +70,15 @@ int write_grid_to_png(grid_t *grid, char *file_name) {
 
     png_bytep bitmap[grid->height];
 
-    convert_grid_to_bitmap(grid, bitmap);
+    if(ConvertGridToBitmap(grid, bitmap) == EXIT_FAILURE) {
+        fprintf(stderr, "png_writer.c: an error occurred during converting grid to bitmap\n");
+
+        DestroyBitmap(bitmap, grid->height);
+        png_destroy_write_struct(&png_ptr, &info_ptr);
+        fclose(fp);
+
+        return EXIT_FAILURE;
+    }
 
     png_init_io(png_ptr, fp);
 
@@ -74,8 +93,8 @@ int write_grid_to_png(grid_t *grid, char *file_name) {
 
     png_write_end(png_ptr, NULL);
 
+    DestroyBitmap(bitmap, grid->height);
     png_destroy_write_struct(&png_ptr, &info_ptr);
-
     fclose(fp);
 
     return EXIT_SUCCESS;
