@@ -14,13 +14,15 @@ int main(int argc, char **argv) {
 
     grid_t grid;
 
-    if (read_png_to_grid(file_name_in, &grid)) {
-//        TODO destroy_grid();
+    if(ReadPngToGrid(file_name_in, &grid) == EXIT_FAILURE) {
+        DestroyGrid(&grid);
+
         return 1;
     }
 
-    if (Simulate(&grid, 1000, 1)) {
-//        TODO destroy_grid(); ?
+    if(Simulate(&grid, 1000, 1) == EXIT_FAILURE) {
+        DestroyGrid(&grid);
+
         return 1;
     }
 
@@ -29,12 +31,13 @@ int main(int argc, char **argv) {
     printf("Time elapsed in ms: %f", elapsed);
 
     /*
-    if (write_grid_to_png(&grid, file_name_out)) {
-//        TODO destroy_grid();
+    if (WriteGridToPng(&grid, file_name_out) == EXIT_FAILURE) {
+        DestroyGrid(&grid);
+
         return 1;
     }
 
-//    TODO destroy_grid();
+    DestroyGrid(&grid);
     */
 
     return 0;

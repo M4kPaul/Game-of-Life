@@ -1,6 +1,6 @@
 #include "grid.h"
 
-int make_grid(grid_t *grid, int width, int height) {
+int MakeGrid(grid_t *grid, int width, int height) {
     int y;
 
     grid->width = width;
@@ -23,7 +23,16 @@ int make_grid(grid_t *grid, int width, int height) {
     return EXIT_SUCCESS;
 }
 
-void print_grid(grid_t *grid) {
+void DestroyGrid(grid_t *grid) {
+    int y;
+
+    for(y = 0; y < grid->height + 2; y++) {
+        free(grid->data[y]);
+    }
+    free(grid->data);
+}
+
+void PrintGrid(grid_t *grid) {
     int y, x;
 
     for (y = 1; y <= grid->height; y++) {
@@ -35,7 +44,7 @@ void print_grid(grid_t *grid) {
     }
 }
 
-void print_grid_with_borders(grid_t *grid) {
+void PrintGridWithBorders(grid_t *grid) {
     int y, x;
 
     for (y = 0; y <= grid->height + 1; y++) {

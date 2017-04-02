@@ -35,7 +35,7 @@ int ReadBMP(FILE *fn, grid_t *grid) {
 
     free(line);
 
-    make_grid(grid, width, height);
+    MakeGrid(grid, width, height);
 
     area = height * width;
     for (i = 0; i < height; i++) {

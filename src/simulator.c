@@ -4,7 +4,7 @@ void *PngSave(void *arguments) {
     threadData *args;
     args = (threadData *)arguments;
 
-    write_grid_to_png(args->grid, args->fileName);
+    WriteGridToPng(args->grid, args->fileName);
 
     pthread_exit(NULL);
 }
@@ -16,8 +16,8 @@ int Simulate(grid_t *grid1, int numberOfGenerations, int type) {
     int responseCode;
     pthread_t threads[numberOfGenerations];
 
-    make_grid(&grid2, grid1->width, grid1->height);
-    make_grid(&data.grid, grid1->width, grid1->height);
+    MakeGrid(&grid2, grid1->width, grid1->height);
+    MakeGrid(&data.grid, grid1->width, grid1->height);
 
     for (i = 0; i < numberOfGenerations; i++) {
         if (i % 2 == 0) {
@@ -37,7 +37,7 @@ int Simulate(grid_t *grid1, int numberOfGenerations, int type) {
                 return EXIT_FAILURE;
             }
         } else {
-            write_grid_to_png(data.grid, data.fileName);
+            WriteGridToPng(data.grid, data.fileName);
         }
     }
 
