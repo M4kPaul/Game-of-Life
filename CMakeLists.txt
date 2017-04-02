@@ -13,7 +13,7 @@ set(SOURCE_FILES
         src/png_reader.c src/png_reader.h
         src/png_writer.c src/png_writer.h
         src/simulator.c src/simulator.h
-        )
+        src/bitmap.c src/bitmap.h)
 
 add_executable(life ${SOURCE_FILES})
 
