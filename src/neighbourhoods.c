@@ -2,11 +2,13 @@
 
 int Neighbours(grid_t *grid, int y, int x, int type) {
     switch (type) {
+        case 1:
+            return Moore(grid, y, x);
         case 2:
             return Neumann(grid, y, x);
-        case 1:
         default:
-            return Moore(grid, y, x);
+            fprintf(stderr, "nieghbourhoods.c: neighbourhood of type %d does not exist\n", type);
+            return -1;
     }
 }
 

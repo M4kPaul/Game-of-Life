@@ -5,6 +5,6 @@
 
 #include "grid.h"
 
-int ReadBMP(FILE *fn, grid_t *grid);
+int ReadBMP(FILE *fileName, grid_t *grid);
 
 #endif /* BMP_READER_H_ */

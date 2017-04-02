@@ -1,6 +1,6 @@
 #include "bmp_reader.h"
 
-int ReadBMP(FILE *fn, grid_t *grid) {
+int ReadBMP(FILE *fileName, grid_t *grid) {
     int sum;                 /* suma RGB/3 = 0 || 1        */
     int i, j, k;             /* zmienne do pętli           */
     size_t row_padded;       /* przesunięcie               */
@@ -9,7 +9,7 @@ int ReadBMP(FILE *fn, grid_t *grid) {
     unsigned char info[54];  /* nagłówek BMP               */
     int height, width, area; /* szereokość, wysokość, pole */
 
-    fread(info, sizeof(unsigned char), 54, fn);
+    fread(info, sizeof(unsigned char), 54, fileName);
 
     width = *(int *)&info[18];
     height = *(int *)&info[22];
@@ -19,7 +19,7 @@ int ReadBMP(FILE *fn, grid_t *grid) {
     row_padded = (size_t)((width * 3 + 3) & (~3));
     line = (unsigned char *)malloc(sizeof *line * row_padded + 1);
     for (i = 0; i < height; i++) {
-        fread(line, sizeof(unsigned char), row_padded, fn);
+        fread(line, sizeof(unsigned char), row_padded, fileName);
         for (j = 0; j < width * 3; j += 3) {
             sum = 0;
             for (k = 0; k < 3; k++) {
