@@ -4,53 +4,54 @@ void *PngSave(void *arguments) {
     threadData *args;
     args = (threadData *)arguments;
 
-    WriteGridToPng(args->grid, args->fileName);
+    WriteGridToPng(&args->grid, args->fileName);
 
     pthread_exit(NULL);
 }
 
 int Simulate(grid_t *grid1, int numberOfGenerations, int type) {
-    int i;
+    int i, j;
     grid_t grid2;
     threadData data;
     int responseCode;
-    pthread_t threads[numberOfGenerations];
+    pthread_t threads[THREADS];
 
     MakeGrid(&grid2, grid1->width, grid1->height);
     MakeGrid(&data.grid, grid1->width, grid1->height);
 
-    for (i = 0; i < numberOfGenerations; i++) {
-        if (i % 2 == 0) {
+    for (i = 1; i <= numberOfGenerations; i++) {
+        if (i % 2) {
             NextGen(grid1, &grid2, type);
         } else {
             NextGen(&grid2, grid1, type);
         }
 
-        data.grid = (i%2) ? grid1 : &grid2;
-        sprintf(data.fileName, "..\\output\\multiThreadTest\\%05d.png", i); /* TODO format size */
+        data.grid = (i % 2) ? grid2 : *grid1;
+        sprintf(data.fileName, "..\\output\\multiThreadTest\\%05d.png", i); /* TODO string size in threadData */
 
         if (MULTITHREADING) {
-            responseCode = pthread_create(&threads[i], NULL, PngSave, (void *)&data);
+            responseCode = pthread_create(&threads[i % THREADS], NULL, PngSave, (void *)&data);
             if (responseCode) {
                 fprintf(stderr, "simulator.c: Error - pthread_create() return code: %d\n", responseCode);
 
                 return EXIT_FAILURE;
             }
         } else {
-            WriteGridToPng(data.grid, data.fileName);
+            WriteGridToPng(&data.grid, data.fileName);
+        }
+
+        if (MULTITHREADING && !(i % THREADS)) {
+            for (j = 0; j < THREADS; j++) {
+                pthread_join(threads[j], NULL);
+            }
         }
     }
 
-    if (MULTITHREADING) {
-        for (i = 0; i < numberOfGenerations; i++) {
-            pthread_join(threads[i], NULL);
-        }
-    }
 
     return EXIT_SUCCESS;
 }
 
-void TransferBorders(grid_t *grid) { /* copy over only if existed in border */
+void TransferBorders(grid_t *grid) {
     int i;
     for (i = 1; i <= grid->width; i++) {
         if (grid->data[0][i]) {
@@ -84,5 +85,4 @@ void NextGen(grid_t *grid1, grid_t *grid2, int type) {
         }
     }
     TransferBorders(grid2);
-//    print_grid(grid2); /* TODO zapis */
 }

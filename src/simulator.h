@@ -10,10 +10,11 @@
 #include "png_writer.h"
 
 #define MULTITHREADING 1
+#define THREADS 1
 
 typedef struct {
-    grid_t *grid;
-    char *fileName;
+    grid_t grid;
+    char fileName[100];
 } threadData;
 
 void *PngSave(void *arguments);
