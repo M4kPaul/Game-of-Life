@@ -5,7 +5,7 @@
 
 #include "grid.h"
 
-int Neighbours(grid_t *grid, int y, int x, int type);
+int Neighbours(grid_t *grid, int y, int x, char type);
 
 int Moore(grid_t *grid, int y, int x);
 

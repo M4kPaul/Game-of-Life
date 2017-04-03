@@ -15,6 +15,6 @@ static int ConvertGridToBitmap(grid_t *grid, png_bytepp bitmap);
 
 static void DestroyBitmap(png_bytepp bitmap, int height);
 
-int WriteGridToPng(grid_t *grid, char *file_name);
+int WriteGridToPng(char *file_name, grid_t *grid);
 
 #endif /* PNG_WRITER_H_ */

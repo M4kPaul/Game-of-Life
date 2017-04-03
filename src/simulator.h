@@ -17,10 +17,10 @@ typedef struct {
 
 void *Thread(void *arguments);
 
-int Simulate(grid_t *grid1, int numberOfGenerations, int neighbourhoodType, outputInfo *info);
+int Simulate(grid_t *grid1, char neighbourhoodType, outputInfo *info);
 
 void TransferBorders(grid_t *grid);
 
-int NextGen(grid_t *grid1, grid_t *grid2, int type);
+int NextGen(grid_t *grid1, grid_t *grid2, char type);
 
 #endif /* SIMULATOR_H_ */

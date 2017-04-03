@@ -32,7 +32,7 @@ static void DestroyBitmap(png_bytepp bitmap, int height) {
     }
 }
 
-int WriteGridToPng(grid_t *grid, char *file_name) {
+int WriteGridToPng(char *file_name, grid_t *grid) {
     FILE *fp = fopen(file_name, "wb");
     if (!fp) {
         fprintf(stderr, "png_writer.c: file %s cannot be opened for writing\n", file_name);

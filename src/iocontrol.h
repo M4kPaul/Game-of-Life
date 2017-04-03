@@ -1,7 +1,10 @@
 #ifndef IOCONTROL_H_
 #define IOCONTROL_H_
 
+#include <limits.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "bmp_reader.h"
 #include "grid.h"
@@ -11,10 +14,20 @@
 typedef struct {
     char *path;
     int generation;
-    char *extension;
+    int numberOfGenerations;
+    char outputMethod;
 } outputInfo;
 
-int Read(FILE *fileName, char* inputMethod);
+int Read(char inputMethod, char *fileName, grid_t *grid);
+
+char *FileNameBuilder(outputInfo *info);
+
 int Write(grid_t *grid, outputInfo *info);
+
+int StrToInt(char *number);
+
+int CheckArgs(int argc, char **argv);
+
+int OutputInfoParser(outputInfo *info, char **argv);
 
 #endif /* IOCONTROL_H_ */

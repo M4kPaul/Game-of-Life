@@ -1,13 +1,15 @@
 #include "neighbourhoods.h"
 
-int Neighbours(grid_t *grid, int y, int x, int type) {
+int Neighbours(grid_t *grid, int y, int x, char type) {
     switch (type) {
-        case 1:
+        case 'm':
+        case 'M':
             return Moore(grid, y, x);
-        case 2:
+        case 'n':
+        case 'N':
             return Neumann(grid, y, x);
         default:
-            fprintf(stderr, "nieghbourhoods.c: neighbourhood of type %d does not exist\n", type);
+            fprintf(stderr, "nieghbourhoods.c: neighbourhood of type -%c does not exist\n", type);
             return -1;
     }
 }

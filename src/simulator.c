@@ -4,20 +4,27 @@ void *Thread(void *arguments) {
     threadData *args;
     args = (threadData *)arguments;
 
-    if (Write(&args->grid, args->info) != EXIT_SUCCESS) {
-                        /* instead of stopping could just display warning about not saving the nth file     */
-        exit(1);        /* should not be used but there is no other way to return the value with the thread */
-    }                   /* official docs:                                                                   */
-                        /* "ERRORS: This function always succeeds."                                         */
-    pthread_exit(NULL); /* "This function does not return to the caller"                                    */
+    if (Write(&args->grid, args->info) == EXIT_FAILURE) {
+        fprintf(stderr, "simulator.c: Warning - failed to save generation number: %d\n", args->info->generation);
+    }
+
+    pthread_exit(NULL);
 }
 
-int Simulate(grid_t *grid1, int numberOfGenerations, int neighbourhoodType, outputInfo *info) {
+int Simulate(grid_t *grid1, char neighbourhoodType, outputInfo *info) {
     int i, j;
     grid_t grid2;
     threadData data;
     int responseCode;
+    int numberOfGenerations;
     pthread_t threads[THREADS];
+
+    numberOfGenerations = info->numberOfGenerations;
+    data.grid = *grid1;
+    info->generation = 0;
+    if(Write(&data.grid, info) == EXIT_FAILURE) {
+        fprintf(stderr, "simulator.c: Warning - failed to save generation number: %d\n", 0);
+    }
 
     MakeGrid(&grid2, grid1->width, grid1->height);
     MakeGrid(&data.grid, grid1->width, grid1->height);
@@ -34,16 +41,19 @@ int Simulate(grid_t *grid1, int numberOfGenerations, int neighbourhoodType, outp
         }
 
         data.grid = (i % 2) ? grid2 : *grid1;
-        data.info = info;
+        info->generation = i;
 
         if (THREADS > 0) {
+            data.info = info;
             responseCode = pthread_create(&threads[i % THREADS], NULL, Thread, (void *)&data);
             if (responseCode) {
                 fprintf(stderr, "simulator.c: Error - pthread_create() return code: %d\n", responseCode);
                 return EXIT_FAILURE;
             }
         } else {
-            Write(&data.grid, data.info);
+            if(Write(&data.grid, info) != EXIT_SUCCESS) {
+                fprintf(stderr, "simulator.c: Warning - failed to save generation number: %d\n", i);
+            }
         }
 
         if (THREADS > 0 && !(i % THREADS)) {
@@ -80,7 +90,7 @@ void TransferBorders(grid_t *grid) {
     }
 }
 
-int NextGen(grid_t *grid1, grid_t *grid2, int type) {
+int NextGen(grid_t *grid1, grid_t *grid2, char type) {
     int i, j, n;
     for (i = 0; i <= grid1->height + 1; i++) {
         for (j = 0; j <= grid1->width + 1; j++) {
