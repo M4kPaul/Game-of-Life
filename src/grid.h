@@ -14,8 +14,4 @@ int MakeGrid(grid_t *grid, int width, int height);
 
 void DestroyGrid(grid_t *grid);
 
-void PrintGrid(grid_t *grid);
-
-void PrintGridWithBorders(grid_t *grid);
-
 #endif /* GRID_H_ */

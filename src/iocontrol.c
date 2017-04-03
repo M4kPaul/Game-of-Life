@@ -28,9 +28,10 @@ int IntLength(int x) {
 
 char *FileNameBuilder(outputInfo *info) {
     int length;
-    char *fileName;
+    char *result;
     char extension[10];
     int numberOfZeroes;
+    char *partialFilePath;
 
     length = (int)strlen(info->path);
     length += IntLength(info->numberOfGenerations);
@@ -47,25 +48,27 @@ char *FileNameBuilder(outputInfo *info) {
             break;
     }
 
-    fileName = calloc(sizeof *fileName * (length + 1), sizeof *fileName);
+    partialFilePath = calloc(sizeof *partialFilePath * (length + 1), sizeof *partialFilePath);
+    result = calloc(sizeof *partialFilePath, sizeof *result);
 
-    strncat(fileName, info->path, strlen(info->path));
+    strncat(partialFilePath, info->path, strlen(info->path));
 
     numberOfZeroes = IntLength(info->numberOfGenerations) - IntLength(info->generation);
     while (numberOfZeroes > 0) {
-        strncat(fileName, "0", 1);
+        strncat(partialFilePath, "0", 1);
         numberOfZeroes--;
     }
-    snprintf(fileName, (size_t)length, "%s%d%s", fileName, info->generation, extension);
 
-    return fileName;
+    snprintf(result, (size_t)length, "%s%d%s", partialFilePath, info->generation, extension);
+
+    return result;
 }
 
 int Write(grid_t *grid, outputInfo *info) {
     char *fileName;
 
     fileName = FileNameBuilder(info);
-
+    
     switch (info->outputMethod) {
         case 'p':
         case 'P':

@@ -8,7 +8,7 @@
 #include "iocontrol.h"
 #include "neighbourhoods.h"
 
-#define THREADS 2
+#define THREADS 10
 
 typedef struct {
     grid_t grid;

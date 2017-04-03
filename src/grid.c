@@ -31,27 +31,3 @@ void DestroyGrid(grid_t *grid) {
     }
     free(grid->data);
 }
-
-void PrintGrid(grid_t *grid) {
-    int y, x;
-
-    for (y = 1; y <= grid->height; y++) {
-        for (x = 1; x <= grid->width; x++) {
-            printf("%c ", (grid->data[y][x]) ? 'o' : ' ');
-            /* printf("%d ", grid->data[y][x]); */
-        }
-        printf("\n");
-    }
-}
-
-void PrintGridWithBorders(grid_t *grid) {
-    int y, x;
-
-    for (y = 0; y <= grid->height + 1; y++) {
-        for (x = 0; x <= grid->width + 1; x++) {
-            printf("%c ", (grid->data[y][x]) ? 'o' : ' ');
-            /* printf("%d ", grid->data[y][x]); */
-        }
-        printf("\n");
-    }
-}
