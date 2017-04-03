@@ -1,28 +1,6 @@
 #include "png_reader.h"
 
-static void DestroyBitmap(png_bytepp bitmap, int height) {
-    int y;
-
-    for(y = 0; y < height; y++) {
-        free(bitmap[y]);
-    }
-}
-
-static int IsBlack(png_bytepp bitmap, int x, int y) {
-    if (bitmap[y][x] == 0 && bitmap[y][++x] == 0 && bitmap[y][++x] == 0) {
-        return 1;
-    }
-    return 0;
-}
-
-static int IsWhite(png_bytepp bitmap, int x, int y) {
-    if (bitmap[y][x] == 255 && bitmap[y][++x] == 255 && bitmap[y][++x] == 255) {
-        return 1;
-    }
-    return 0;
-}
-
-static int WriteBitmapToGrid(grid_t *grid, png_bytepp bitmap) {
+static int WriteBitmapToGrid(grid_t *grid, bitmap_t *bitmap) {
     int y, x, i;
 
     for (y = 0; y < grid->height; y++) {
@@ -137,39 +115,32 @@ int ReadPngToGrid(char *file_name, grid_t *grid) {
         return EXIT_FAILURE;
     }
 
-    int y;
-    png_bytep bitmap[height];
+    bitmap_t bitmap;
 
-    for (y = 0; y < height; y++) {
-        bitmap[y] = malloc(PIXEL_SIZE_DEFAULT * width * sizeof(uint8_t));
-        if (!bitmap[y]) {
-            fprintf(stderr, "png_reader.c: memory cannot be allocated for bitmap\n");
-
-            DestroyBitmap(bitmap, height);
-            png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-            fclose(fp);
-
-            return EXIT_FAILURE;
-        }
-    }
-
-    png_read_image(png_ptr, bitmap);
-
-    png_read_end(png_ptr, end_info);
-
-    MakeGrid(grid, width, height);
-
-    if (WriteBitmapToGrid(grid, bitmap)) {
-        fprintf(stderr, "png_reader.c: unknown pixel's color\n");
-
-        DestroyBitmap(bitmap, height);
+    if(MakeBitmap(&bitmap, width, height) == EXIT_FAILURE) {
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         fclose(fp);
 
         return EXIT_FAILURE;
     }
 
-    DestroyBitmap(bitmap, height);
+    png_read_image(png_ptr, bitmap.data);
+
+    png_read_end(png_ptr, end_info);
+
+    MakeGrid(grid, width, height);
+
+    if (WriteBitmapToGrid(grid, &bitmap)) {
+        fprintf(stderr, "png_reader.c: unknown pixel's color\n");
+
+        DestroyBitmap(&bitmap);
+        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
+        fclose(fp);
+
+        return EXIT_FAILURE;
+    }
+
+    DestroyBitmap(&bitmap);
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     fclose(fp);
 

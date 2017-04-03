@@ -1,34 +1,22 @@
 #include "png_writer.h"
 
-static int ConvertGridToBitmap(grid_t *grid, png_bytepp bitmap) {
-    int position;
+static void ConvertGridToBitmap(grid_t *grid, bitmap_t *bitmap) {
+    int y, x, i;
 
-    for (int y = 1; y <= grid->height; y++) {
-        png_bytep row = malloc(PIXEL_SIZE_DEFAULT * grid->width * sizeof(uint8_t));
-        if(!row) {
-            return EXIT_FAILURE;
-        }
-        for (int x = 1; x <= grid->width; x++) {
-            position = PIXEL_SIZE_DEFAULT * (x - 1);
+    for (y = 1; y <= grid->height; y++) {
+        for (x = 1; x <= grid->width; x++) {
+            i = PIXEL_SIZE_DEFAULT * (x - 1);
+
             if (grid->data[y][x] == 0) {
-                row[position] = 255;
-                row[++position] = 255;
-                row[++position] = 255;
+                bitmap->data[y - 1][i] = 255;
+                bitmap->data[y - 1][++i] = 255;
+                bitmap->data[y - 1][++i] = 255;
             } else {
-                row[position] = 0;
-                row[++position] = 0;
-                row[++position] = 0;
+                bitmap->data[y - 1][i] = 0;
+                bitmap->data[y - 1][++i] = 0;
+                bitmap->data[y - 1][++i] = 0;
             }
         }
-        bitmap[y - 1] = row;
-    }
-
-    return EXIT_SUCCESS;
-}
-
-static void DestroyBitmap(png_bytepp bitmap, int height) {
-    for(int y = 0; y < height; y++) {
-        free(bitmap[y]);
     }
 }
 
@@ -68,17 +56,16 @@ int WriteGridToPng(char *file_name, grid_t *grid) {
         return EXIT_FAILURE;
     }
 
-    png_bytep bitmap[grid->height];
+    bitmap_t bitmap;
 
-    if(ConvertGridToBitmap(grid, bitmap) == EXIT_FAILURE) {
-        fprintf(stderr, "png_writer.c: an error occurred during converting grid to bitmap\n");
-
-        DestroyBitmap(bitmap, grid->height);
+    if(MakeBitmap(&bitmap, grid->width, grid->height) == EXIT_FAILURE) {
         png_destroy_write_struct(&png_ptr, &info_ptr);
         fclose(fp);
 
         return EXIT_FAILURE;
     }
+
+    ConvertGridToBitmap(grid, &bitmap);
 
     png_init_io(png_ptr, fp);
 
@@ -89,11 +76,11 @@ int WriteGridToPng(char *file_name, grid_t *grid) {
 
     png_write_info(png_ptr, info_ptr);
 
-    png_write_image(png_ptr, bitmap);
+    png_write_image(png_ptr, bitmap.data);
 
     png_write_end(png_ptr, NULL);
 
-    DestroyBitmap(bitmap, grid->height);
+    DestroyBitmap(&bitmap);
     png_destroy_write_struct(&png_ptr, &info_ptr);
     fclose(fp);
 
