@@ -28,13 +28,13 @@ int MakeBitmap(bitmap_t *bitmap, int width, int height) {
     bitmap->width = width * PIXEL_SIZE_DEFAULT;
     bitmap->height = height;
 
-    bitmap->data = malloc(bitmap->height * sizeof(png_bytep));
+    bitmap->data = calloc(bitmap->height * sizeof(png_bytep), sizeof(png_bytep));
     if(!bitmap->data) {
         fprintf(stderr, "bitmap.c: memory cannot be allocated for the bitmap\n");
     }
 
     for(y = 0; y < bitmap->height; y++) {
-        bitmap->data[y] = malloc(PIXEL_SIZE_DEFAULT * bitmap->width * sizeof(uint8_t));
+        bitmap->data[y] = calloc(PIXEL_SIZE_DEFAULT * bitmap->width * sizeof(png_byte), sizeof(png_byte));
         if(!bitmap->data[y]) {
             fprintf(stderr, "bitmap.c: memory cannot be allocated for the bitmap\n");
 

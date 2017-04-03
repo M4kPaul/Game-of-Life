@@ -5,7 +5,6 @@ project(Game_of_Life)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic") # nie działa?
 
 set(SOURCE_FILES
-        src/main.c
         src/bmp_reader.c src/bmp_reader.h
         src/grid.c src/grid.h
         src/iocontrol.c src/iocontrol.h

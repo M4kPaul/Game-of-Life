@@ -9,7 +9,7 @@ int MakeGrid(grid_t *grid, int width, int height) {
     width += 2;
     height += 2;
 
-    grid->data = calloc(height * sizeof(int), sizeof(int));
+    grid->data = calloc(height * sizeof(int*), sizeof(int*));
 
     for (y = 0; y < height; y++) {
         grid->data[y] = calloc(width * sizeof(int), sizeof(int));

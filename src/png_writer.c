@@ -8,13 +8,13 @@ static void ConvertGridToBitmap(grid_t *grid, bitmap_t *bitmap) {
             i = PIXEL_SIZE_DEFAULT * (x - 1);
 
             if (grid->data[y][x] == 0) {
-                bitmap->data[y][i] = 255;
-                bitmap->data[y][++i] = 255;
-                bitmap->data[y][++i] = 255;
+                bitmap->data[y - 1][i] = 255;
+                bitmap->data[y - 1][++i] = 255;
+                bitmap->data[y - 1][++i] = 255;
             } else {
-                bitmap->data[y][i] = 0;
-                bitmap->data[y][++i] = 0;
-                bitmap->data[y][++i] = 0;
+                bitmap->data[y - 1][i] = 0;
+                bitmap->data[y - 1][++i] = 0;
+                bitmap->data[y - 1][++i] = 0;
             }
         }
     }
