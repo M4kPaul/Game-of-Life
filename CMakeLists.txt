@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic") # nie działa?
 
 set(SOURCE_FILES
         src/main.c
+        src/bitmap.c src/bitmap.h
         src/bmp_reader.c src/bmp_reader.h
         src/grid.c src/grid.h
         src/iocontrol.c src/iocontrol.h
