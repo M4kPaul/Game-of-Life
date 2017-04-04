@@ -47,9 +47,9 @@ int ReadBMP(char *fileName, grid_t *grid) {
     MakeGrid(grid, width, height);
 
     area = height * width;
-    for (i = 0; i < height; i++) {
+    for (i = 1; i <= height; i++) {
         for (j = 0; j < width; j++) {
-            grid->data[i + 1][j + 1] = in[area - width + j] - '0';
+            grid->data[i + 1][j + 1] = in[area - i * width + j] - '0';
         }
     }
 

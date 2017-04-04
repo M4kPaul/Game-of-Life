@@ -8,15 +8,10 @@ void DestroyBitmap(bitmap_t *bitmap) {
     }
 }
 
-int IsBlack(bitmap_t *bitmap, int x, int y) {
-    if (bitmap->data[y][x] == 0 && bitmap->data[y][++x] == 0 && bitmap->data[y][++x] == 0) {
-        return 1;
-    }
-    return 0;
-}
-
 int IsWhite(bitmap_t *bitmap, int x, int y) {
-    if (bitmap->data[y][x] == 255 && bitmap->data[y][++x] == 255 && bitmap->data[y][++x] == 255) {
+    int sum;
+    sum = bitmap->data[y][x] + bitmap->data[y][++x] + bitmap->data[y][++x];
+    if (sum / 3.0 < 0.5 * 255) {
         return 1;
     }
     return 0;

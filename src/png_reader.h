@@ -11,7 +11,7 @@
 
 #define NUMBER_OF_CHECKED_BYTES 8
 
-static int WriteBitmapToGrid(grid_t *grid, bitmap_t *bitmap);
+static void WriteBitmapToGrid(grid_t *grid, bitmap_t *bitmap);
 
 int ReadPngToGrid(char *fileName, grid_t *grid);
 

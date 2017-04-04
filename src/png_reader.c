@@ -1,21 +1,13 @@
 #include "png_reader.h"
 
-static int WriteBitmapToGrid(grid_t *grid, bitmap_t *bitmap) {
+static void WriteBitmapToGrid(grid_t *grid, bitmap_t *bitmap) {
     int y, x, i;
 
     for (y = 0; y < grid->height; y++) {
         for (x = 0, i = 1; x < grid->width * PIXEL_SIZE_DEFAULT; x += 3, i++) {
-            if (IsBlack(bitmap, x, y)) {
-                grid->data[y + 1][i] = 1;
-            } else if (IsWhite(bitmap, x, y)) {
-                grid->data[y + 1][i] = 0;
-            } else {
-                return EXIT_FAILURE;
-            }
+            grid->data[y + 1][i] = IsWhite(bitmap, x, y);
         }
     }
-
-    return EXIT_SUCCESS;
 }
 
 int ReadPngToGrid(char *fileName, grid_t *grid) {
@@ -130,15 +122,7 @@ int ReadPngToGrid(char *fileName, grid_t *grid) {
 
     MakeGrid(grid, width, height);
 
-    if (WriteBitmapToGrid(grid, &bitmap)) {
-        fprintf(stderr, "png_reader.c: unknown pixel's color\n");
-
-        DestroyBitmap(&bitmap);
-        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        fclose(fp);
-
-        return EXIT_FAILURE;
-    }
+    WriteBitmapToGrid(grid, &bitmap);
 
     DestroyBitmap(&bitmap);
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
