@@ -11,6 +11,6 @@
 
 static void ConvertGridToBitmap(grid_t *grid, bitmap_t *bitmap);
 
-int WriteGridToPng(char *file_name, grid_t *grid);
+int WriteGridToPng(char *fileName, grid_t *grid);
 
 #endif /* PNG_WRITER_H_ */

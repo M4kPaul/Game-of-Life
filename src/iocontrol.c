@@ -14,23 +14,23 @@ int Read(char inputMethod, char *fileName, grid_t *grid) {
     }
 }
 
-int IntLength(int x) {
-    int res;
+int IntLength(int number) {
+    int result;
 
-    res = 1;
-    while (x / 10) {
-        x /= 10;
-        res++;
+    result = 1;
+    while (number / 10) {
+        number /= 10;
+        result++;
     }
 
-    return res;
+    return result;
 }
 
 char *FileNameBuilder(outputInfo *info) {
     int length;
     char *result;
-    char extension[10];
     int numberOfZeroes;
+    char extension[100];
     char *partialFilePath;
 
     length = (int)strlen(info->path);
@@ -39,17 +39,17 @@ char *FileNameBuilder(outputInfo *info) {
     switch (info->outputMethod) {
         case 'p':
         case 'P':
-            strncpy(extension, ".png", 5);
+            strcpy(extension, ".png");
             length += 5;
             break;
         default:
-            strncpy(extension, "", 1);
+            strcpy(extension, "");
             length += 1;
             break;
     }
 
-    partialFilePath = calloc(sizeof *partialFilePath * (length + 1), sizeof *partialFilePath);
-    result = calloc(sizeof *partialFilePath, sizeof *result);
+    partialFilePath = calloc(length * sizeof(char), sizeof(char));
+    result = calloc(length * sizeof(char), sizeof(char));
 
     strncat(partialFilePath, info->path, strlen(info->path));
 
@@ -118,7 +118,8 @@ int CheckArgs(int argc, char **argv) {
 int OutputInfoParser(outputInfo *info, int argc, char **argv) {
     info->outputMethod = argv[5][1];
     if ((info->numberOfGenerations = StrToInt(argv[2])) == 0) {
-        fprintf(stderr, "iocontrol.c: numberOfGenerations must be an integer from the range of <1, %d>\n", INT_MAX);
+        fprintf(stderr, "iocontrol.c: numberOfGenerations must be a positive integer"
+                " from the range of <1, %d>\n", INT_MAX);
         return EXIT_FAILURE;
     }
     info->path = argv[6];
@@ -135,7 +136,8 @@ int OutputInfoParser(outputInfo *info, int argc, char **argv) {
         }
 
         if ((info->numberOfThreads = StrToInt(argv[8])) == 0) {
-            fprintf(stderr, "iocontrol.c: numberOfThreads must be a positive integer\n");
+            fprintf(stderr, "iocontrol.c: numberOfThreads must be a positive integer"
+                    " from the range of <1, %d>\n", INT_MAX);
             return EXIT_FAILURE;
         }
     } else {

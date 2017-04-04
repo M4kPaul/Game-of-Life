@@ -13,7 +13,7 @@ static char *usage =
   "       neighbourhoodType - type of a neighbourhood used for counting surrounding neighbours:                     \n"
   "           -N - von Neumann neighborhood is composed of its four adjacent cells                                  \n"
   "           -M - Moore neighborhood is composed of the eight cells which surround the central one                 \n"
-  "       numberOfGenerations - number of generations (an integer from the range of <1, %d>)                        \n"
+  "       numberOfGenerations - number of generations (a positive integer)                                          \n"
   "       inputMethod - a method of reading the 0th generation:                                                     \n"
   "           -b - a BMP                                                                                            \n"
   "           -p - a PNG                                                                                            \n"
@@ -24,7 +24,7 @@ static char *usage =
   "       outputPath - a path, with system specific path separator at the end, of where to save each generation     \n"
   "   optional:                                                                                                     \n"
   "       -t - indicates the will of using multiple threads                                                         \n"
-  "       <numberOfThreads> - number of threads to use while saving files (an integer from the range of <1, %d>)    \n"
+  "       <numberOfThreads> - number of threads to use while saving files (a positive integer)                      \n"
   "                                                                                                                \n";
 
 int main(int argc, char **argv) {

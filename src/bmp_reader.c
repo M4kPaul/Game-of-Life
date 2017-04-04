@@ -3,7 +3,7 @@
 int ReadBMP(char *fileName, grid_t *grid) {
     int sum;                 /* suma RGB/3 = 0 || 1        */
     int i, j, k;             /* zmienne do pętli           */
-    size_t row_padded;       /* przesunięcie               */
+    size_t rowPadded;        /* przesunięcie               */
     unsigned char *in;       /* BMP jako 0 i 1             */
     unsigned char *line;     /* linia z RGB pixela         */
     unsigned char info[54];  /* nagłówek BMP               */
@@ -24,10 +24,10 @@ int ReadBMP(char *fileName, grid_t *grid) {
 
     in = (unsigned char *)malloc(sizeof *in * width * height + 1);
 
-    row_padded = (size_t)((width * 3 + 3) & (~3));
-    line = (unsigned char *)malloc(sizeof *line * row_padded + 1);
+    rowPadded = (size_t)((width * 3 + 3) & (~3));
+    line = (unsigned char *)malloc(sizeof *line * rowPadded + 1);
     for (i = 0; i < height; i++) {
-        fread(line, sizeof(unsigned char), row_padded, fp);
+        fread(line, sizeof(unsigned char), rowPadded, fp);
         for (j = 0; j < width * 3; j += 3) {
             sum = 0;
             for (k = 0; k < 3; k++) {

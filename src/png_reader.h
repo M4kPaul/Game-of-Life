@@ -13,6 +13,6 @@
 
 static int WriteBitmapToGrid(grid_t *grid, bitmap_t *bitmap);
 
-int ReadPngToGrid(char *file_name, grid_t *grid);
+int ReadPngToGrid(char *fileName, grid_t *grid);
 
 #endif /* PNG_READER_H_ */

@@ -18,12 +18,12 @@ static int WriteBitmapToGrid(grid_t *grid, bitmap_t *bitmap) {
     return EXIT_SUCCESS;
 }
 
-int ReadPngToGrid(char *file_name, grid_t *grid) {
+int ReadPngToGrid(char *fileName, grid_t *grid) {
     FILE *fp;
 
-    fp = fopen(file_name, "rb");
+    fp = fopen(fileName, "rb");
     if (!fp) {
-        fprintf(stderr, "png_reader.c: file %s cannot be open for reading\n", file_name);
+        fprintf(stderr, "png_reader.c: file %s cannot be open for reading\n", fileName);
 
         return EXIT_FAILURE;
     }
@@ -42,7 +42,7 @@ int ReadPngToGrid(char *file_name, grid_t *grid) {
     fread(header, 1, 8, fp);
 
     if (png_sig_cmp((png_bytep)header, 0, 8)) {
-        fprintf(stderr, "png_reader.c: file %s is not recognized as a PNG file\n", file_name);
+        fprintf(stderr, "png_reader.c: file %s is not recognized as a PNG file\n", fileName);
 
         free(header);
         fclose(fp);
@@ -88,7 +88,7 @@ int ReadPngToGrid(char *file_name, grid_t *grid) {
     }
 
     if (setjmp(png_jmpbuf(png_ptr))) {
-        fprintf(stderr, "png_reader.c: an error occurred during reading file %s\n", file_name);
+        fprintf(stderr, "png_reader.c: an error occurred during reading file %s\n", fileName);
 
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         fclose(fp);
@@ -107,7 +107,7 @@ int ReadPngToGrid(char *file_name, grid_t *grid) {
     height = (int)png_get_image_height(png_ptr, info_ptr);
 
     if (setjmp(png_jmpbuf(png_ptr))) {
-        fprintf(stderr, "png_reader.c: an error occurred during reading file %s\n", file_name);
+        fprintf(stderr, "png_reader.c: an error occurred during reading file %s\n", fileName);
 
         png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
         fclose(fp);
