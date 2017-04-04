@@ -20,7 +20,7 @@ static char *usage =
   "           -p - a PNG                                                                                                         \n"
   "       inputFile - a path of input file with its proper extension                                                             \n"
   "       outputMethod - a method of writing the nth generation:                                                                 \n"
-  "           (corresponding outputMethod behaviour is equivalent as in inputMethod)                                             \n"
+  "           (corresponding outputMethod behaviour is equivalent to an inputMethod)                                             \n"
   "           -p - a PNG                                                                                                         \n"
   "           -n - numbers                                                                                                       \n"
   "       outputPath - a path, with system specific path separator at the end, of where to save each generation                  \n"
