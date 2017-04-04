@@ -16,6 +16,7 @@ typedef struct {
     int generation;
     int numberOfGenerations;
     char outputMethod;
+    int numberOfThreads;
 } outputInfo;
 
 int Read(char inputMethod, char *fileName, grid_t *grid);
@@ -28,6 +29,6 @@ int StrToInt(char *number);
 
 int CheckArgs(int argc, char **argv);
 
-int OutputInfoParser(outputInfo *info, char **argv);
+int OutputInfoParser(outputInfo *info, int argc, char **argv);
 
 #endif /* IOCONTROL_H_ */

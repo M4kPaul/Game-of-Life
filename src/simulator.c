@@ -16,10 +16,13 @@ int Simulate(grid_t *grid1, char neighbourhoodType, outputInfo *info) {
     grid_t grid2;
     threadData data;
     int responseCode;
+    int numberOfThreads;
     int numberOfGenerations;
-    pthread_t threads[THREADS];
+    pthread_t threads[info->numberOfThreads];
 
+    numberOfThreads = info->numberOfThreads;
     numberOfGenerations = info->numberOfGenerations;
+
     data.grid = *grid1;
     info->generation = 0;
     if(Write(&data.grid, info) == EXIT_FAILURE) {
@@ -43,9 +46,9 @@ int Simulate(grid_t *grid1, char neighbourhoodType, outputInfo *info) {
         data.grid = (i % 2) ? grid2 : *grid1;
         info->generation = i;
 
-        if (THREADS > 0) {
+        if (numberOfThreads > 0) {
             data.info = info;
-            responseCode = pthread_create(&threads[i % THREADS], NULL, Thread, (void *)&data);
+            responseCode = pthread_create(&threads[i % numberOfThreads], NULL, Thread, (void *)&data);
             if (responseCode) {
                 fprintf(stderr, "simulator.c: Error - pthread_create() return code: %d\n", responseCode);
                 return EXIT_FAILURE;
@@ -56,8 +59,8 @@ int Simulate(grid_t *grid1, char neighbourhoodType, outputInfo *info) {
             }
         }
 
-        if (THREADS > 0 && !(i % THREADS)) {
-            for (j = 0; j < THREADS; j++) {
+        if (numberOfThreads > 0 && !(i % numberOfThreads)) {
+            for (j = 0; j < numberOfThreads; j++) {
                 responseCode = pthread_join(threads[j], NULL);
                 if (responseCode != 0) {
                     fprintf(stderr, "simulator.c: Error - pthread_join() return code: %d\n", responseCode);
